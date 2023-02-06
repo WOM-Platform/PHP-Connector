@@ -59,6 +59,8 @@ class RESTClient {
     }
 
     private function PostRequest($payload, $url){
+        \WOM\Logger::$Instance->debug("POST ${url}: {$payload}");
+
         try {
             $request = $this->client->request('POST', $url, [
                 'json' => \GuzzleHttp\json_decode($payload)
@@ -69,9 +71,6 @@ class RESTClient {
             return json_decode($request->getBody(), true);
         }
         catch (ClientException $e) {
-            \WOM\Logger::$Instance->debug("Request URI: {$e->getRequest()->getUri()}");
-            \WOM\Logger::$Instance->debug("Request body: {$e->getRequest()->getBody()}");
-
             $response = $e->getResponse();
             $responseBodyAsString = $response->getBody()->getContents();
             \WOM\Logger::$Instance->debug("Response body: {$responseBodyAsString}");
